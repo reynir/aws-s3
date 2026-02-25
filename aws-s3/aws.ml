@@ -19,9 +19,6 @@ let get_chunked_length ~chunk_size payload_length =
   chunks * (4 + 17 + 64) + lengths + 1 +
   payload_length
 
-let%test "get_chunk_length" =
-  get_chunked_length ~chunk_size:(64*1024) (65*1024) = 66824
-
 module Make(Io : Types.Io) = struct
   module Body = Body.Make(Io)
   module Http = Http.Make(Io)

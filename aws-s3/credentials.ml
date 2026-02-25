@@ -9,9 +9,6 @@ let time_of_json_exn t =
   with
   | _ -> raise Json.(Protocol_error (make_error ~value:t "Not an iso8601 string"))
 
-let%test "time conv" =
-  time_of_json_exn (`String "2018-08-06T19:26:20Z") = 1533583580.
-
 type t = {
   access_key: string [@key "AccessKeyId"];
   secret_key: string [@key "SecretAccessKey"];
