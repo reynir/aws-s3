@@ -1,0 +1,4 @@
+(library
+  (name aws_s3_mirage)
+  (public_name aws-s3-mirage)
+  (libraries aws-s3 lwt mirage-net tcpip happy-eyeballs-mirage mirage-sleep duration tls-mirage ca-certs-nss))
