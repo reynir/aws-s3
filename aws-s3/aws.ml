@@ -97,7 +97,7 @@ module Make(Io : Types.Io) = struct
     Pipe.create_reader ~f:(transfer initial_signature Digestif.SHA256.empty 0 [] None)
 
   let make_request ~(endpoint: Region.endpoint) ?connect_timeout_ms ?(expect=false) ~sink ?(body=Body.Empty) ?(credentials:Credentials.t option) ~headers ~meth ~path ~query () =
-    let (date, time)  = Unix.gettimeofday () |> Time.iso8601_of_time in
+    let (date, time)  = Mirage_ptime.now () |> Time.iso8601_of_time in
 
     (* Create headers structure *)
     let content_length =

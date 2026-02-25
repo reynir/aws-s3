@@ -44,12 +44,7 @@ let parse_rcf1123_string date_str =
 let%test _ =
   parse_rcf1123_string "Mon, 16 Jul 2018 10:31:41 GMT" = 1531737101.0
 
-let iso8601_of_time time =
-  let t =
-    Ptime.of_float_s time
-    |> function Some t -> t | None -> failwith "Time out of range"
-  in
-
+let iso8601_of_time t =
   let (year, month, day), ((hour, min, sec), _) = Ptime.to_date_time t in
   let date_str = sprintf "%.4d%.2d%.2d" year month day in
   let time_str = sprintf "%.2d%.2d%.2d" hour min sec in
