@@ -65,28 +65,9 @@ module Make(Io : Types.Io) = struct
         Deferred.Or_error.fail (Failure msg)
   end
 
-  module Local = struct
-    let get_credentials ?(profile="default") () =
-      let home = Sys.getenv_opt "HOME" |> function Some v -> v | None -> "." in
-      let creds_file = Printf.sprintf "%s/.aws/credentials" home in
-      Deferred.Or_error.catch @@
-      fun () ->
-      let ini = new Inifiles.inifile creds_file in
-      let access_key = ini#getval profile "aws_access_key_id" in
-      let secret_key = ini#getval profile "aws_secret_access_key" in
-      make ~access_key ~secret_key () |> Deferred.Or_error.return
-  end
-
   module Helper = struct
-    let get_credentials ?profile () =
-      match profile with
-      | Some profile -> Local.get_credentials ~profile ()
-      | None -> begin
-          Local.get_credentials ~profile:"default" () >>= function
-          | Result.Ok c -> Deferred.Or_error.return c
-          | Error _ ->
-            Iam.get_role () >>=? fun role ->
-            Iam.get_credentials role
-        end
+    let get_credentials ?profile:_ () =
+      Iam.get_role () >>=? fun role ->
+      Iam.get_credentials role
   end
 end
